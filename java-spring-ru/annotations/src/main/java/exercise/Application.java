@@ -14,7 +14,9 @@ public class Application {
             // Проверяем, есть ли у метода аннотация @Inspect
             if (method.isAnnotationPresent(Inspect.class)) {
 
-                System.out.println("Method getCity" + method.getName() + " returns a value of type " + method.getReturnType());
+                var mOutType = method.getReturnType().getSimpleName();
+
+                System.out.println("Method getCity" + method.getName() + " returns a value of type " + mOutType);
             }
         }
         // END
