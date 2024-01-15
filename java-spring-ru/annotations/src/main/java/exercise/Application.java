@@ -16,7 +16,7 @@ public class Application {
 
                 var mOutType = method.getReturnType().getSimpleName();
 
-                System.out.println("Method getCity" + method.getName() + " returns a value of type " + mOutType);
+                System.out.println("Method " + method.getName() + " returns a value of type " + mOutType);
             }
         }
         // END
