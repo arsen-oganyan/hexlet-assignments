@@ -26,7 +26,14 @@ public class PostsController {
 
     @PostMapping("/{id}/posts") // Создание страницы
     public ResponseEntity<Post> create(@PathVariable int id, @RequestBody Post post) {
-        posts.add(post);
+
+        var in_post = post;
+        in_post.setUserId(id);
+        in_post.setSlug(post.getSlug());
+        in_post.setTitle(post.getTitle());
+        in_post.setBody(post.getBody());
+
+        posts.add(in_post);
         return ResponseEntity.status(201).body(post);
     }
 }
