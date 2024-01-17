@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,30 +28,27 @@ public class Application {
 
     // BEGIN
     @GetMapping("/posts") // Список страниц
-    public ResponseEntity<List<Post>> index(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
+    public List<Post> index(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         if (page < 1) page = 1;
-        var res = posts.stream().skip((page-1)*limit).limit(limit).toList();
-        return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(posts.size()))
-                .body(res);
+        return posts.stream().skip((page-1)*limit).limit(limit).toList();
     }
 
     @PostMapping("/posts") // Создание страницы
-    public ResponseEntity<Post> create(@RequestBody Post post) {
+    public Post create(@RequestBody Post post) {
         posts.add(post);
-        return ResponseEntity.status(201).body(post);
+        return post;
     }
 
     @GetMapping("/posts/{id}") // Вывод страницы
-    public ResponseEntity<Post> show(@PathVariable String id) {
+    public Optional<Post> show(@PathVariable String id) {
         var post = posts.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
-        return ResponseEntity.of(post);
+        return post;
     }
 
     @PutMapping("/posts/{id}") // Обновление страницы
-    public ResponseEntity<Post> update(@PathVariable String id, @RequestBody Post data) {
+    public Post update(@PathVariable String id, @RequestBody Post data) {
         var maybePost = posts.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
@@ -61,11 +57,8 @@ public class Application {
             post.setId(data.getId());
             post.setTitle(data.getTitle());
             post.setBody(data.getBody());
-
-            return ResponseEntity.ok(data);
-        } else {
-            return ResponseEntity.status(204).body(data);
         }
+        return data;
     }
 
     @DeleteMapping("/posts/{id}") // Удаление страницы
