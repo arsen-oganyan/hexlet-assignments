@@ -11,4 +11,9 @@ public class User {
     private Long id;
     private String name;
     private String email;
+
+    /*public boolean isAdmin() {
+        return this.email in
+    }
+    */
 }

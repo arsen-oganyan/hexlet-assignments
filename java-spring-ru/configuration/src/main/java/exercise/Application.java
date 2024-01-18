@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +16,7 @@ import  org.springframework.beans.factory.annotation.Autowired;
 import exercise.model.User;
 import exercise.component.UserProperties;
 
+import static java.lang.System.in;
 import static java.util.Comparator.naturalOrder;
 
 @SpringBootApplication
@@ -30,9 +32,14 @@ public class Application {
     @GetMapping("/admins")
     public List admins() {
         List admlst = (List) adminsinfo.getAdmins();
-        admlst.sort(naturalOrder());
-        //List admlst1 = new ArrayList(Collections.singleton(Collections.sort(admlst)));
-        return admlst;
+
+        List adms = users.stream()
+                .filter(u -> admlst.contains(u.getEmail()))
+                .map(User::getName)
+                .collect(Collectors.toList());
+
+        Collections.sort(adms);
+        return adms;
         //return adminsinfo.getAdmins();
     }
     // END
