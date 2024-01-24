@@ -1,5 +1,6 @@
 package exercise.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,12 +46,25 @@ public class ProductsController {
         return product;
     }
 
+    /*
+        Customer customerToUpdate = customerRepository.getReferenceById(id);
+        customerToUpdate.setName(customerDto.getName);
+        customerRepository.save(customerToUpdate);
+    */
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Product upd(@PathVariable long id, @RequestBody Product prod) {
-        var prd = productRepository.findById(id);
-        productRepository.save(prd.orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found")));
-        return prod;
+
+        Product check = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
+
+        Product prd = productRepository.getReferenceById(id);
+        prd.setTitle(prod.getTitle());
+        prd.setPrice(prod.getPrice());
+        System.out.println(prd.getPrice());
+        productRepository.save(prd);
+            //throw new ResourceNotFoundException("Product with id " + id + " not found");
+        return prd;
     }
     // END
 
