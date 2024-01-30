@@ -15,6 +15,7 @@ version = "1.0-SNAPSHOT"
 
 application { mainClass.set("exercise.Application") }
 
+
 repositories {
     mavenCentral()
 }
@@ -41,11 +42,18 @@ dependencies {
 
 }
 
+tasks {
+    withType<JavaExec> {
+        jvmArgs("-Dfile.encoding=UTF-8")
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
     testLogging {
         exceptionFormat = TestExceptionFormat.FULL
         events = mutableSetOf(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED)
         showStandardStreams = true
+        systemProperty("file.encoding", "UTF-8")
     }
 }

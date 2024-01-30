@@ -23,6 +23,8 @@ import exercise.repository.CarRepository;
 import exercise.model.Car;
 import exercise.dto.CarUpdateDTO;
 
+import java.nio.charset.StandardCharsets;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class CarControllerTest {
@@ -43,9 +45,12 @@ class CarControllerTest {
 
     @BeforeEach
     public void setUp() {
+        //String ololo;
+        //ololo = new String("Citroën".getBytes(StandardCharsets.UTF_8));
+
         testCar = Instancio.of(Car.class)
                 .ignore(Select.field(Car::getId))
-                .supply(Select.field(Car::getModel), () -> faker.brand().car())
+                .supply(Select.field(Car::getModel), () -> faker.brand().car())//)
                 .supply(Select.field(Car::getManufacturer), () -> faker.brand().car())
                 .supply(Select.field(Car::getEnginePower), () -> faker.number().numberBetween(1, 100))
                 .create();
